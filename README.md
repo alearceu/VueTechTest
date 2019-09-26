@@ -11,9 +11,14 @@ $ npm install vuelidate --save
 $ npm i @fortawesome/fontawesome-svg-core --save
 $ npm i @fortawesome/free-solid-svg-icons --save
 $ npm i @fortawesome/vue-fontawesome --save
+$ npm install node-sass sass-loader --save-dev
 ```
 $ npm run serve
 ```
+npm install -g serve
+serve -s dist
+```
+
 ##
 -Para el diseño utilicé Vue Material y fontawesome (íconos)
 -Creo el store userModule donde guardo una lista con los usuarios creados
