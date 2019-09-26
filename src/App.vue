@@ -45,7 +45,7 @@ export default {
 .md-content {
   z-index: 1;
   width: 100%;
-  max-width: 600px;
+  max-width: 800px;
   position: relative;
 }
 

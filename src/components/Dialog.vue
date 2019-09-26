@@ -1,20 +1,22 @@
 <template>
   <div>
     <!--Diálogo que muestra la comunicación con el Form por medio del store-->
-    <!--Carga la lista de los usuarios desde el store y muestra algunos valores para cada usuario-->
+    <!--Carga la lista de los usuarios desde el store y muestra cada usuario-->
     <md-dialog :md-active.sync="showDialog">
-      <md-dialog-title>Usuarios</md-dialog-title>
+      <md-dialog-content>
+        <md-dialog-title>Usuarios</md-dialog-title>
         <md-tabs md-dynamic-height>
           <md-tab md-label="Información">
+            <ul>
             <div v-for="user in allUsers"  :key="user.idNumber">
-              <p>
-                {{ user.firstName +" "+ user.lastName 
-                +" "+user.idNumber
-                +" "+user.bloodType+" "+user.email}}
-              </p>
+              <li>
+                {{user}}
+              </li>
             </div>
+            </ul>
           </md-tab>
         </md-tabs>
+      </md-dialog-content>
       <md-dialog-actions>
         <md-button class="md-primary" @click="showDialog = false">Cerrar</md-button>
       </md-dialog-actions>

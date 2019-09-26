@@ -20,7 +20,7 @@
             <!--Nombre-->
             <div class="md-layout-item md-large-size-40 md-medium-size-40 md-small-size-40 md-xsmall-size-100">
               <md-field :class="getValidationClass('firstName')">
-                <md-input placeholder="Nombre*" v-model="form.firstName" :disabled="sending" />
+                <md-input class="biggerLabel" id="name" placeholder="Nombre*" v-model="form.firstName" :disabled="sending" />
                 <span class="md-error" v-if="!$v.form.firstName.required">El nombre es requerido</span>
                 <span class="md-error" v-else-if="!$v.form.firstName.minlength">Nombre inválido</span>
               </md-field>
@@ -28,7 +28,7 @@
             <!--Apellidos-->
             <div class="md-layout-item md-large-size-40 md-medium-size-40 md-small-size-40 md-xsmall-size-100">
               <md-field>
-                <md-input placeholder="Apellidos" v-model="form.lastName" :disabled="sending" />
+                <md-input class="biggerLabel" id="name" placeholder="Apellidos" v-model="form.lastName" :disabled="sending" />
               </md-field>
             </div>
           </div>
@@ -36,7 +36,7 @@
             <!--Espacio para el avatar de la fila superior-->
             <div class="md-layout-item md-size-15"/>
             <!--RadioButtons para Género-->
-            <div class="md-layout-item md-large-size-100 md-medium-size-100 md-small-size-100 md-xsmall-size-100">  
+            <div class="md-layout-item md-large-size-55 md-medium-size-55 md-small-size-55 md-xsmall-size-100">  
               <ul>
                 <li>
                   <input type="radio" id="radioFem" v-model="form.gender"  value= "Femenino">
@@ -135,19 +135,19 @@
               <label id="labelfor" for="menu">Teléfono</label>
               <md-field name="menu" id="menu" :class="getValidationClass('phoneNumber')"> 
                 <md-menu md-direction="bottom-start" >
-                  <md-button md-menu-trigger >
+                  <md-button class="menuButton" md-menu-trigger >
                     <!--Si es móvil-->
                     <span v-if="form.phoneType === 'mobile'">
                       <span class="myIcons">
                         <font-awesome-icon  icon="mobile-alt"/>
                       </span>
                       <span class="myIcons">
-                        <font-awesome-icon icon="angle-down"/>
+                        <font-awesome-icon class="iconDown" icon="angle-down"/>
                       </span>
                     </span>
                     <!--Si es teléfono fijo-->
                     <span v-else>
-                      <font-awesome-icon icon="tty"/><font-awesome-icon icon="angle-down" />
+                      <font-awesome-icon icon="tty"/><font-awesome-icon class="iconDown" icon="angle-down" />
                     </span>
                   </md-button>
                   <!--Contenido del menú-->
@@ -162,12 +162,12 @@
                 </md-menu>
                 <!--Menú de Código de Área-->
                 <md-menu md-direction="bottom-start">
-                  <md-button md-menu-trigger>
+                  <md-button class="menuButton" md-menu-trigger>
                     <span v-if="form.phoneExtension === 'CR'">
-                      +506<font-awesome-icon icon="angle-down" />
+                      +506<font-awesome-icon class="iconDown" icon="angle-down" />
                     </span>
                     <span v-else>
-                      +52<font-awesome-icon icon="angle-down" />
+                      +52<font-awesome-icon class="iconDown" icon="angle-down" />
                     </span>
                   </md-button>
                   <!--Contenido del menú (CR, MX)-->
@@ -177,8 +177,8 @@
                   </md-menu-content>
                 </md-menu>
                 <!--Número de teléfono. Validado por el método phonePatternCheck-->
-                <md-input placeholder="Teléfono" name="phoneNumber" id="phoneNumber" v-model="form.phoneNumber" :disabled="sending" />
-                <span id="errorPhone" class="md-error" v-if="!$v.form.phoneNumber.phonePatternCheck">Formato de 8 dígitos para CR y 10 para MX</span>
+                <md-input placeholder="Teléfono" name="phoneNumber" id="phoneNumber" v-model="form.phoneNumber" @blur="$v.form.phoneNumber.$touch()" :disabled="sending" />
+                <span id="errorPhone" class="md-error" v-if="!$v.form.phoneNumber.phonePatternCheck">506 XXXX-XXXX / 52 XX-XXXX-XXXXX</span>
               </md-field>
             </div>
             <!--Correo electrónico-->
@@ -216,10 +216,10 @@
   //Para el store
   import { mapState, mapGetters, mapActions } from 'vuex'
   
-  //Constantes para validar que el número de CR sea de tipo 4444-4444 o 22334455
-  //Constantes para validar que el número de MX sea de tipo 22-4444-4444 o 2233445566
-  const regexCR= /^[0-9]{4}(-)?[0-9]{4}$/g;
-  const regexMX= /^[0-9]{2}(-)?[0-9]{4}(-)?[0-9]{4}$/g;
+  //Constantes para validar que el número de CR sea de tipo XXXX-XXXX
+  //Constantes para validar que el número de MX sea de tipo XX-XXXX-XXXX
+  const regexCR= /^[0-9]{4}-[0-9]{4}$/g;
+  const regexMX= /^[0-9]{2}-[0-9]{4}-[0-9]{4}$/g;
   
   export default {
     name: 'FormValidation',
@@ -256,12 +256,12 @@
         hideButton: 'visible',
       }
     },
-    //funciones del state y getter del store
+    //Funciones del state y getter del store
     computed: {
       ...mapState('userModule', ['users']),
       ...mapGetters('userModule',["allUsers"])
     },
-    //funciones de las validaciones
+    //Funciones de las validaciones
     validations: {
       form: {
         firstName: {
@@ -271,7 +271,7 @@
           email
         },
         phoneNumber: {
-          //valida el formato del número de teléfono
+          //Valida el formato del número de teléfono
           phonePatternCheck(phoneNumber){
             let areaCode = this.form.phoneExtension;
             return(
@@ -283,9 +283,9 @@
       }
     },
     methods: {
-      //actions del store
+      //Actions del store
       ...mapActions('userModule', ['register', 'getUsers']),
-      //agrega un nuevo tipo de identificación al menú
+      //Agrega un nuevo tipo de identificación al menú
       addSelectOption(){
         if(this.value === null || this.value === ''){
           alert("Tipo de identificación vacío");
@@ -294,15 +294,19 @@
           this.selectOptions.unshift({value: this.value, label: this.value});
         }
       },
-      //agrega un nuevo número de teléfono
+      //Revisa que sea válido y agrega un nuevo número de teléfono
       addNewPhoneNumber(){
-        if(this.$v.form.phoneNumber.phonePatternCheck){
+        this.$v.form.phoneNumber.$touch()
+        if (!this.$v.form.phoneNumber.$invalid) {
           let type = this.form.phoneType;
           let extension = this.form.phoneExtension;
           let number = this.form.phoneNumber;
           let newPhone = [type,extension,number];
-          this.form.phones.unshift(newPhone);
-          this.addedPhone = true;
+          //Si el teléfono no fue agregado a la lista de teléfonos, lo agrega
+          if(this.form.phones.every(i => newPhone.includes(i))){
+            this.form.phones.unshift(newPhone);
+            this.addedPhone = true;
+          }
         }
       },
       getValidationClass (fieldName) {
@@ -313,7 +317,7 @@
           }
         }
       },
-      //limpia el form
+      //Limpia el form
       clearForm () {
         this.$v.$reset()
         this.form.firstName = null
@@ -328,8 +332,9 @@
         this.form.phoneNumber = null
         this.form.email = null
       },
-      //llama a registrar el form en el store
+      //Llama a registrar el form en el store
       saveUser () {
+        this.addNewPhoneNumber();
         this.sending = true;
         this.register(this.form);
         this.userSaved = true;
@@ -343,7 +348,7 @@
         }
       }
     },
-    //carga los usuarios existentes del local storage
+    //Carga los usuarios existentes del local storage
     created(){
       this.getUsers();
     }
@@ -406,6 +411,7 @@
   .md-field{
     margin-bottom: 0px;
     margin-top: 0px;
+    max-width: 411px;
   }
   .md-button{
     margin-top: 0px;
@@ -429,5 +435,33 @@
   .endlayout{
     align-content: flex-end;
     justify-content: flex-end;
+  }
+
+  .iconDown{
+    margin-left: 5px;
+  }
+
+  .md-avatar{
+    display: flex;
+  }
+
+  .menuButton{
+    font-size: 16px;
+  }
+
+  .biggerLabel {
+    font-size: 28px !important;
+  }
+  #name::-webkit-input-placeholder {
+    font-size: 28px !important;
+  }
+  #name::-moz-placeholder {
+    font-size: 28px !important;
+  }
+  #name:-ms-input-placeholder {
+    font-size: 28px !important;
+  }
+  #name::placeholder{
+    font-size: 28px !important;
   }
 </style>
